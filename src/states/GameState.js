@@ -4,14 +4,20 @@ class GameState extends Phaser.State {
 	preload(){
 		this.game.load.image('mountains-back', 'assets/img/back/mountains-back.png')
 		this.game.load.image('mountains-mid1', 'assets/img/back/mountains-mid1.png')
-		this.game.load.image('mountains-mid2', 'assets/img/back/mountains-mid2.png')
+        this.game.load.image('mountains-mid2', 'assets/img/back/mountains-mid2.png')
+        
+        this.game.load.image('one', 'assets/img/back/1png')
+		this.game.load.image('two', 'assets/img/back/2.png')
+        this.game.load.image('three', 'assets/img/back/3.png')
+        this.game.load.image('four', 'assets/img/back/4.png')
+		this.game.load.image('five', 'assets/img/back/5.png')
 
 		this.game.load.image('floor_tile', './assets/img/dirt_snow.png')
 		this.game.load.image('restart', './assets/img/reset.png');
-		this.game.load.image('ground', './assets/img/platform.png');
 		this.game.load.image('tile', './assets/img/brick_grey.png')
 		this.game.load.image('dude','./assets/img/blue.png');
-		this.game.load.image('moon', './assets/img/moon.png')
+        this.game.load.image('moon', './assets/img/moon.png')
+        this.game.load.spritesheet('mort', './assets/img/mort.png', 24, 24)
 
 		this.game.load.audio('main', './assets/sound/music.mp3');
 		this.game.load.audio('death', './assets/sound/death.mp3');
@@ -50,10 +56,12 @@ class GameState extends Phaser.State {
 			this.player.body.velocity.x=-260;
 		}
 		else if (cursors.right.isDown) {
+            this.player.animations.play('right');
 			this.player.body.velocity.x = 260;
 		}
 		else {
-			this.player.body.velocity.x=0;
+            this.player.body.velocity.x=0;
+            this.player.frame = 1;
 		}
 
 		if (cursors.up.isDown && this.player.body.touching.down) {
@@ -61,14 +69,22 @@ class GameState extends Phaser.State {
 		}
 		this.game.physics.arcade.collide(this.player, this.blocks, this.gameOver, null, this);
 
-		this.mountainsBack.tilePosition.x -=.05
-		this.mountainsMid1.tilePosition.x -=.3
-		this.mountainsMid2.tilePosition.x -= .75
+		// this.mountainsBack.tilePosition.x -=.05
+		// this.mountainsMid1.tilePosition.x -=.3
+        // this.mountainsMid2.tilePosition.x -= .75
+        this.one.tilePosition.x -=.05
+		this.two.tilePosition.x -=.2
+        this.three.tilePosition.x -= .4
+        this.four.tilePosition.x -= .6
+        this.five.tilePosition.x-= .75
 
 	}
 	createPlayer (){
-		this.player = this.game.add.sprite(100, 450, 'dude')
-		this.player.scale.setTo(.5, .5)
+        // this.player = this.game.add.sprite(100, 450, 'dude')
+        this.player = this.game.add.sprite(15, 30, 'mort');
+        this.player.frame = 1;
+        this.player.animations.add('right', [8,9,10,11,12], 10, true);
+		this.player.scale.setTo(4, 4)
 		this.game.physics.arcade.enable(this.player);
 		this.player.bounce = .2
 		this.player.body.gravity.y = 800;
@@ -108,7 +124,8 @@ class GameState extends Phaser.State {
 	gameOver() {
 		this.music.stop()
 		this.blocks.destroy();
-		this.scoreLabel.destroy()
+        this.scoreLabel.destroy()
+        this.player.frame = 1;
 
 		var style = { font: "bold 100px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
 		var text = this.game.add.text(0, 0, "Game Over", style);
@@ -124,20 +141,44 @@ class GameState extends Phaser.State {
 		this.game.add.button(this.game.world.centerX, 400, 'restart', ()=> this.restart(), this, 2, 1, 0)
 	}
 	loadBackground(){
-		this.mountainsBack = this.game.add.tileSprite(0, 
-		this.game.height - this.game.cache.getImage('mountains-back').height,
-		this.game.width,
-		this.game.cache.getImage('mountains-back').height, 'mountains-back')
+		// this.mountainsBack = this.game.add.tileSprite(0, 
+		// this.game.height - this.game.cache.getImage('mountains-back').height,
+		// this.game.width,
+		// this.game.cache.getImage('mountains-back').height, 'mountains-back')
 
-		this.mountainsMid1 = this.game.add.tileSprite(0,
-			this.game.height - this.game.cache.getImage('mountains-mid1').height,
-			this.game.width,
-			this.game.cache.getImage('mountains-mid1').height, 'mountains-mid1')
+		// this.mountainsMid1 = this.game.add.tileSprite(0,
+		// 	this.game.height - this.game.cache.getImage('mountains-mid1').height,
+		// 	this.game.width,
+		// 	this.game.cache.getImage('mountains-mid1').height, 'mountains-mid1')
 
-		this.mountainsMid2 = this.game.add.tileSprite(0,
-			this.game.height - this.game.cache.getImage('mountains-mid2').height,
-			this.game.width,
-			this.game.cache.getImage('mountains-mid2').height, 'mountains-mid2')
+		// this.mountainsMid2 = this.game.add.tileSprite(0,
+		// 	this.game.height - this.game.cache.getImage('mountains-mid2').height,
+		// 	this.game.width,
+        // 	this.game.cache.getImage('mountains-mid2').height, 'mountains-mid2')
+        this.one = this.game.add.tileSprite(0, 
+            this.game.height - this.game.cache.getImage('one').height,
+            this.game.width,
+            this.game.cache.getImage('one').height, 'one')
+    
+            this.two = this.game.add.tileSprite(0,
+                this.game.height - this.game.cache.getImage('two').height,
+                this.game.width,
+                this.game.cache.getImage('two').height, 'two')
+    
+            this.three = this.game.add.tileSprite(0,
+                this.game.height - this.game.cache.getImage('three').height,
+                this.game.width,
+                this.game.cache.getImage('three').height, 'three')
+
+                this.four = this.game.add.tileSprite(0,
+                    this.game.height - this.game.cache.getImage('four').height,
+                    this.game.width,
+                    this.game.cache.getImage('four').height, 'four')
+        
+                this.five = this.game.add.tileSprite(0,
+                    this.game.height - this.game.cache.getImage('five').height,
+                    this.game.width,
+                    this.game.cache.getImage('five').height, 'five')
 
 		this.game.add.image(65, 65, 'moon')
 	}
